@@ -20,11 +20,60 @@
  */
 
 // Import necessary libraries and components
-import { useState, useEffect } from "react"; // For state management and side effects
+import { useState, useEffect, useRef } from "react"; // For state management and side effects
 import { FaGithub, FaLinkedinIn, FaTwitter } from "react-icons/fa"; // Social media icons
 import { HiOutlineMail } from "react-icons/hi"; // Email icon
 import { IoMoon, IoSunny } from "react-icons/io5"; // Theme toggle icons
-import Image from "next/image"; // Next.js optimized Image component
+
+// Custom hook for scroll-triggered animations
+const useScrollAnimation = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.1, // Trigger when 10% of element is visible
+      }
+    );
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  return { ref, isVisible };
+};
+
+// Component to wrap text elements with scroll animation
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const AnimatedText = ({ children, ...props }: { children: React.ReactNode; [key: string]: any }) => {
+  const { ref, isVisible } = useScrollAnimation();
+  
+  return (
+    <Box 
+      ref={ref}
+      sx={{ 
+        opacity: isVisible ? 1 : 0, 
+        transition: 'opacity 0.8s ease-in-out',
+        ...props.sx
+      }}
+      {...props}
+    >
+      {children}
+    </Box>
+  );
+};
 import {
   AppBar, // Top navigation bar
   Box, // Basic layout container
@@ -473,7 +522,7 @@ export default function Home() {
                     lineHeight: 1.2,
                   }}
                 >
-                  Hi, I&apos;m Roberto Arevalo
+                  Hi, I&apos;m Roberto Arevalo 
             
                   {/* Job title with gradient effect */}
                   <Typography
@@ -572,64 +621,67 @@ export default function Home() {
           
           <Container maxWidth="md" sx={styles.sectionContainer}>
             {/* Section title */}
-            <Typography 
-              variant="h3" 
-              component="h2" 
-              sx={styles.sectionTitle}
-              data-aos="fade-up"
-            >
-              About Me
-            </Typography>
-            <Divider sx={styles.divider} />
+            <AnimatedText>
+              <Typography 
+                variant="h3" 
+                component="h2" 
+                sx={styles.sectionTitle}
+              >
+                About Me
+              </Typography>
+              <Divider sx={styles.divider} />
+            </AnimatedText>
             
             {/* About content - using Paper component for card effect */}
-            <Paper 
-              elevation={0} 
-              sx={{ 
-                p: 4, 
-                borderRadius: 4, 
-                background: darkMode ? 'rgba(19, 47, 76, 0.5)' : 'rgba(255, 255, 255, 0.8)',
-                backdropFilter: 'blur(10px)',
-                border: darkMode ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(0, 0, 0, 0.05)',
-              }}
-            >
-              {/* About text content */}
-              <Typography 
-                variant="body1" 
-                paragraph 
-                sx={{ fontSize: '1.1rem', lineHeight: 1.7 }}
+            <AnimatedText>
+              <Paper 
+                elevation={0} 
+                sx={{ 
+                  p: 4, 
+                  borderRadius: 4, 
+                  background: darkMode ? 'rgba(19, 47, 76, 0.5)' : 'rgba(255, 255, 255, 0.8)',
+                  backdropFilter: 'blur(10px)',
+                  border: darkMode ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(0, 0, 0, 0.05)',
+                }}
               >
-                With over 5 years of experience in web development, I specialize in creating
-                high-performance, responsive web applications using React, Next.js, and Node.js. My
-                approach combines technical expertise with a strong focus on user experience and clean,
-                maintainable code.
-              </Typography>
-              <Typography 
-                variant="body1" 
-                paragraph
-                sx={{ fontSize: '1.1rem', lineHeight: 1.7 }}
-              >
-                Previously, I worked at XYZ Technologies where I led the frontend development team,
-                improving application performance by 40% and implementing CI/CD pipelines that reduced
-                deployment time by 65%. I&apos;m passionate about sharing knowledge and have contributed to
-                several open-source projects.
-              </Typography>
-              
-              {/* Resume download button */}
-              <Box sx={{ mt: 4, display: 'flex', gap: 2, justifyContent: 'center' }}>
-                <Button 
-                  variant="contained" 
-                  color="primary"
-                  href="/resume.pdf"
-                  target="_blank"
-                  sx={{ 
-                    background: 'linear-gradient(to right, #3a86ff, #5e60ce)',
-                  }}
+                {/* About text content */}
+                <Typography 
+                  variant="body1" 
+                  paragraph 
+                  sx={{ fontSize: '1.1rem', lineHeight: 1.7 }}
                 >
-                  Download Resume
-                </Button>
-              </Box>
-            </Paper>
+                  With over 5 years of experience in web development, I specialize in creating
+                  high-performance, responsive web applications using React, Next.js, and Node.js. My
+                  approach combines technical expertise with a strong focus on user experience and clean,
+                  maintainable code.
+                </Typography>
+                <Typography 
+                  variant="body1" 
+                  paragraph
+                  sx={{ fontSize: '1.1rem', lineHeight: 1.7 }}
+                >
+                  Previously, I worked at XYZ Technologies where I led the frontend development team,
+                  improving application performance by 40% and implementing CI/CD pipelines that reduced
+                  deployment time by 65%. I&apos;m passionate about sharing knowledge and have contributed to
+                  several open-source projects.
+                </Typography>
+                
+                {/* Resume download button */}
+                <Box sx={{ mt: 4, display: 'flex', gap: 2, justifyContent: 'center' }}>
+                  <Button 
+                    variant="contained" 
+                    color="primary"
+                    href="/resume.pdf"
+                    target="_blank"
+                    sx={{ 
+                      background: 'linear-gradient(to right, #3a86ff, #5e60ce)',
+                    }}
+                  >
+                    Download Resume
+                  </Button>
+                </Box>
+              </Paper>
+            </AnimatedText>
           </Container>
         </Box>
 
@@ -655,15 +707,18 @@ export default function Home() {
           
           <Container maxWidth="md" sx={styles.sectionContainer}>
             {/* Section title */}
-            <Typography variant="h3" component="h2" sx={styles.sectionTitle}>
-              Featured Projects
-            </Typography>
-            <Divider sx={styles.divider} />
+            <AnimatedText>
+              <Typography variant="h3" component="h2" sx={styles.sectionTitle}>
+                Featured Projects
+              </Typography>
+              <Divider sx={styles.divider} />
+            </AnimatedText>
             
             {/* Projects grid - using Card components */}
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              {projectsData.map((project, index) => (
-                <Card key={index} sx={styles.projectCard} elevation={darkMode ? 1 : 2}>
+            <AnimatedText>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                {projectsData.map((project, index) => (
+                  <Card key={index} sx={styles.projectCard} elevation={darkMode ? 1 : 2}>
                   {/* Card content - title, description, technologies */}
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography variant="h5" component="h3" fontWeight="bold" gutterBottom>
@@ -718,7 +773,8 @@ export default function Home() {
                   </CardActions>
                 </Card>
               ))}
-            </Box>
+              </Box>
+            </AnimatedText>
           </Container>
         </Box>
 
@@ -744,22 +800,25 @@ export default function Home() {
           
           <Container maxWidth="md" sx={styles.sectionContainer}>
             {/* Section title */}
-            <Typography variant="h3" component="h2" sx={styles.sectionTitle}>
-              Technical Skills
-            </Typography>
-            <Divider sx={styles.divider} />
+            <AnimatedText>
+              <Typography variant="h3" component="h2" sx={styles.sectionTitle}>
+                Technical Skills
+              </Typography>
+              <Divider sx={styles.divider} />
+            </AnimatedText>
             
             {/* Skills content - using Paper component for card effect */}
-            <Paper 
-              elevation={darkMode ? 1 : 3} 
-              sx={{ 
-                p: 4, 
-                borderRadius: 4, 
-                background: darkMode ? 'rgba(19, 47, 76, 0.5)' : 'rgba(255, 255, 255, 0.8)',
-                backdropFilter: 'blur(10px)',
-                border: darkMode ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(0, 0, 0, 0.05)',
-              }}
-            >
+            <AnimatedText>
+              <Paper 
+                elevation={darkMode ? 1 : 3} 
+                sx={{ 
+                  p: 4, 
+                  borderRadius: 4, 
+                  background: darkMode ? 'rgba(19, 47, 76, 0.5)' : 'rgba(255, 255, 255, 0.8)',
+                  backdropFilter: 'blur(10px)',
+                  border: darkMode ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(0, 0, 0, 0.05)',
+                }}
+              >
               <MuiGrid container spacing={6}>
                 {/* Left column - Frontend skills */}
                 <MuiGrid>
@@ -894,6 +953,7 @@ export default function Home() {
                 </Box>
               </Box>
             </Paper>
+            </AnimatedText>
           </Container>
         </Box>
 
@@ -919,12 +979,15 @@ export default function Home() {
           
           <Container maxWidth="md" sx={styles.sectionContainer}>
             {/* Section title */}
-            <Typography variant="h3" component="h2" sx={styles.sectionTitle}>
-              Get In Touch
-            </Typography>
-            <Divider sx={styles.divider} />
+            <AnimatedText>
+              <Typography variant="h3" component="h2" sx={styles.sectionTitle}>
+                Get In Touch
+              </Typography>
+              <Divider sx={styles.divider} />
+            </AnimatedText>
             
-            <MuiGrid container spacing={4}>
+            <AnimatedText>
+              <MuiGrid container spacing={4}>
               {/* Left column - Contact information */}
               <MuiGrid>
                 <Typography 
@@ -1092,6 +1155,7 @@ export default function Home() {
                 </Paper>
               </MuiGrid>
             </MuiGrid>
+            </AnimatedText>
           </Container>
         </Box>
 
