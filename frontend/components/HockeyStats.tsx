@@ -5,7 +5,6 @@ import { getTodaysGames, getLeagueStandings } from '@/lib/hockeyApi';
 import {
   getStatusLabel,
   isGameLive,
-  isGameFinal,
   getStatusColor,
   getStatusBadgeColor,
   getClinchedStatus,
@@ -95,7 +94,7 @@ export default function HockeyStats() {
               : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
           }`}
         >
-          Today's Games
+          Today&apos;s Games
         </button>
         <button
           onClick={() => setActiveTab('standings')}
@@ -115,7 +114,6 @@ export default function HockeyStats() {
             games.map((game) => {
               const statusLabel = getStatusLabel(game.status);
               const isLive = isGameLive(game.status);
-              const isFinal = isGameFinal(game.status);
               
               return (
                 <div
