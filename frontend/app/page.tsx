@@ -24,6 +24,7 @@ import { useState, useEffect, useRef } from "react"; // For state management and
 import { FaGithub, FaLinkedinIn, FaTwitter } from "react-icons/fa"; // Social media icons
 import { HiOutlineMail } from "react-icons/hi"; // Email icon
 import { IoMoon, IoSunny } from "react-icons/io5"; // Theme toggle icons
+import HockeyStats from "@/components/HockeyStats"; // Hockey stats component
 
 // Custom hook for scroll-triggered animations
 const useScrollAnimation = () => {
@@ -774,6 +775,44 @@ export default function Home() {
                 </Card>
               ))}
               </Box>
+            </AnimatedText>
+          </Container>
+        </Box>
+
+        {/* ===== HOCKEY STATS SECTION ===== */}
+        <Box 
+          component="section" 
+          id="hockey" 
+          sx={{ 
+            py: 12, 
+            bgcolor: darkMode ? '#132f4c' : '#ffffff',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Decorative shape - circles */}
+          <Box 
+            sx={{ 
+              ...styles.sectionShape, 
+              right: -100, 
+              top: -150,
+            }} 
+          />
+          
+          <Container maxWidth="md" sx={styles.sectionContainer}>
+            {/* Section title */}
+            <AnimatedText>
+              <Typography variant="h3" component="h2" sx={styles.sectionTitle}>
+                Hockey Stats
+              </Typography>
+              <Divider sx={styles.divider} />
+            </AnimatedText>
+            
+            {/* Hockey Stats Component */}
+            <AnimatedText>
+              <Paper sx={{ p: 4, bgcolor: darkMode ? '#1a3a52' : '#f8fafc' }}>
+                <HockeyStats />
+              </Paper>
             </AnimatedText>
           </Container>
         </Box>
