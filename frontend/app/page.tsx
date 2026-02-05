@@ -25,6 +25,7 @@ import { FaGithub, FaLinkedinIn, FaTwitter } from "react-icons/fa"; // Social me
 import { HiOutlineMail } from "react-icons/hi"; // Email icon
 import { IoMoon, IoSunny } from "react-icons/io5"; // Theme toggle icons
 import HockeyStats from "@/components/HockeyStats"; // Hockey stats component
+import ScrollToTop from "@/components/ScrollToTop"; // Scroll to top button
 
 // Custom hook for scroll-triggered animations
 const useScrollAnimation = () => {
@@ -1226,6 +1227,9 @@ export default function Home() {
             </Box>
           </Container>
         </Box>
+
+        {/* ===== SCROLL TO TOP BUTTON ===== */}
+        <ScrollToTop darkMode={darkMode} />
       </Box>
     </ThemeProvider>
   );
