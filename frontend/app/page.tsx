@@ -21,9 +21,11 @@
 
 // Import necessary libraries and components
 import { useState, useEffect, useRef } from "react"; // For state management and side effects
+import NextLink from "next/link"; // For navigation links
 import { FaGithub, FaLinkedinIn, FaTwitter } from "react-icons/fa"; // Social media icons
 import { HiOutlineMail } from "react-icons/hi"; // Email icon
 import { IoMoon, IoSunny } from "react-icons/io5"; // Theme toggle icons
+import { FaCalendar } from "react-icons/fa"; // Calendar icon
 import HockeyStats from "@/components/HockeyStats"; // Hockey stats component
 import ScrollToTop from "@/components/ScrollToTop"; // Scroll to top button
 
@@ -412,6 +414,22 @@ export default function Home() {
                   >
                     Contact
                   </Button>
+                  <NextLink href="/calendar" style={{ textDecoration: 'none' }}>
+                    <Button 
+                      color="inherit" 
+                      sx={{ 
+                        mx: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 0.5,
+                        bgcolor: 'rgba(58, 134, 255, 0.1)',
+                        '&:hover': { bgcolor: 'rgba(58, 134, 255, 0.2)' }
+                      }}
+                      startIcon={<FaCalendar />}
+                    >
+                      Calendar
+                    </Button>
+                  </NextLink>
                 </Box>
                 
                 {/* Social media icons */}
