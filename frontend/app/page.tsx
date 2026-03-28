@@ -1252,3 +1252,10 @@ export default function Home() {
     </ThemeProvider>
   );
 }
+<a href="https://google.com" target="_blank" rel="noopener noreferrer">
+  <img 
+    src="/homelandermeme.jpg" 
+    alt="Funny meme"
+    style={{ cursor: 'pointer' }}
+  />
+</a>
